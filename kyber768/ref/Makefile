@@ -1,6 +1,6 @@
-CC ?= /usr/bin/cc
+CC ?= /usr/bin/clang
 CFLAGS += -Wall -Wextra -Wpedantic -Wmissing-prototypes -Wredundant-decls \
-          -Wshadow -Wpointer-arith -fomit-frame-pointer -mtune=native -O3
+          -Wshadow -Wpointer-arith -fomit-frame-pointer -mtune=native -O3 -DUSE_PERF
 NISTFLAGS += -Wno-unused-result -mpopcnt -maes \
              -mtune=native -O3 -fomit-frame-pointer
 RM = /bin/rm
@@ -20,10 +20,10 @@ RAND_SOURCES = $(RAND_PATH)/randombytes.c $(RAND_PATH)/rng.c $(RAND_PATH)/chacha
 CFLAGS += -I$(HASH_PATH) -I$(SORT_PATH) -I$(RAND_PATH)
 
 CYCLES_PATH = ../../common
-CYCLES_HEADERS = $(CYCLES_PATH)/cycles.h
-CYCLES_SOURCES = $(CYCLES_PATH)/cycles.c
+CYCLES_HEADERS = $(CYCLES_PATH)/cycles.h $(CYCLES_PATH)/perf_event.h
+CYCLES_SOURCES = $(CYCLES_PATH)/cycles.c $(CYCLES_PATH)/perf_event.c
 
-BENCHFLAGS = -I$(CYCLES_PATH) -DBENCH
+BENCHFLAGS = -I$(CYCLES_PATH) -DBENCH -DUSE_PERF
 
 ASM_HEADERs =
 ASM_SOURCES =
@@ -32,7 +32,7 @@ HASH_HEADERS += symmetric.h
 HASH_SOURCES += symmetric-shake.c
 
 HEADERS = params.h api.h indcpa.h polyvec.h poly.h ntt.h cbd.h reduce.h verify.h
-SOURCES = kem.c indcpa.c polyvec.c poly.c ntt.c cbd.c reduce.c verify.c
+SOURCES = kem.c indcpa.c polyvec.c poly.c ntt.c cbd.c reduce.c verify.c 
 
 HEADERS += $(ASM_HEADERS) $(C_HEADERS) $(HASH_HEADERS) $(SORT_HEADERS) $(RAND_HEADERS)
 SOURCES += $(ASM_SOURCES) $(C_SOURCES) $(HASH_SOURCES) $(SORT_SOURCES) $(RAND_SOURCES)
